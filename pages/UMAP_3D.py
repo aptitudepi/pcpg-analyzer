@@ -3,7 +3,6 @@ import umap
 import pandas as pd
 from scipy.stats import median_abs_deviation
 import plotly.express as px
-import umap.plot
 
 df = pd.read_csv("data/logcpm.csv")
 
