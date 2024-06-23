@@ -28,7 +28,7 @@ coords = pd.DataFrame(coords, columns=["UMAP1", "UMAP2"])
 
 # Create the UMAP plot
 fig = px.scatter(
-    coords, x="UMAP1", y="UMAP2", color=top_genes.index, labels={'color': 'sample'}
+    coords, x="UMAP1", y="UMAP2", color=top_genes.index, labels={'color': 'Sample'}
 )
 
 # Display the plot in Streamlit

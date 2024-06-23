@@ -7,6 +7,8 @@ import umap.plot
 
 df = pd.read_csv("data/logcpm.csv")
 
+df
+
 df["MAD"] = df.iloc[: , 1:].apply(lambda row: median_abs_deviation(row, scale=1), axis=1)
 
 # Select top genes based on MAD
@@ -17,8 +19,6 @@ top_genes.drop(['MAD'], axis=1, inplace=True)
 # Transpose our dataframe such that the samples become rows, and the genes, columns
 top_genes = top_genes.set_index("GENE").T
 
-top_genes
-
 # Apply UMAP
 reducer = umap.UMAP(n_components=3, init='random', random_state=0)
 coords = reducer.fit_transform(top_genes)
@@ -27,7 +27,7 @@ coords = pd.DataFrame(coords, columns=["UMAP1", "UMAP2", "UMAP3"])
 
 # Create the UMAP plot
 fig = px.scatter_3d(
-    coords, x="UMAP1", y="UMAP2", z="UMAP3", color=top_genes.index, labels={'color': 'sample'}
+    coords, x="UMAP1", y="UMAP2", z="UMAP3", color=top_genes.index, labels={'color':'Sample'}
 )
 
 # Display the plot in Streamlit
