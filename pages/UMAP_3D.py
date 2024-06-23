@@ -20,7 +20,7 @@ top_genes.drop(['MAD'], axis=1, inplace=True)
 top_genes = top_genes.set_index("GENE").T
 
 # Apply UMAP
-reducer = umap.UMAP(n_components=3, init='random', random_state=0)
+reducer = umap.UMAP(n_components=3, init='random')
 coords = reducer.fit_transform(top_genes)
 coords = pd.DataFrame(coords, columns=["UMAP1", "UMAP2", "UMAP3"])
 # umap_result now contains the 2D embedding coordinates

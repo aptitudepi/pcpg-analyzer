@@ -20,7 +20,7 @@ top_genes = top_genes.set_index("GENE").T
 top_genes
 
 # Apply UMAP
-reducer = umap.UMAP(n_components=2, init='random', random_state=0)
+reducer = umap.UMAP(n_components=2, init='random')
 coords = reducer.fit_transform(top_genes)
 print(coords)
 coords = pd.DataFrame(coords, columns=["UMAP1", "UMAP2"])
