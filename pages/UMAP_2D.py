@@ -29,6 +29,6 @@ coords = pd.DataFrame(coords, columns=["UMAP1", "UMAP2"])
 fig = px.scatter(
     coords, x="UMAP1", y="UMAP2", color=top_genes.index, labels={'color': 'Sample'}
 )
-
+fig.update_traces(marker=dict(size=7))
 # Display the plot in Streamlit
 st.plotly_chart(fig)

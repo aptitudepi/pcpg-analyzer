@@ -20,14 +20,13 @@ top_genes = top_genes.set_index("GENE").T
 
 # Apply UMAP
 reducer = umap.UMAP(n_components=3, init='random')
-coords = reducer.fit_transform(top_genes)
-coords = pd.DataFrame(coords, columns=["UMAP1", "UMAP2", "UMAP3"])
+coords = pd.DataFrame(reducer.fit_transform(top_genes), columns=["UMAP1", "UMAP2", "UMAP3"])
 # umap_result now contains the 2D embedding coordinates
 
 # Create the UMAP plot
 fig = px.scatter_3d(
     coords, x="UMAP1", y="UMAP2", z="UMAP3", color=top_genes.index, labels={'color':'Sample'}
 )
-
+fig.update_traces(marker=dict(size=5))
 # Display the plot in Streamlit
 st.plotly_chart(fig)
