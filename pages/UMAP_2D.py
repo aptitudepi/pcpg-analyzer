@@ -38,4 +38,4 @@ fig = px.scatter(
 fig.update_traces(marker=dict(size=7))
 
 # Display the plot in Streamlit
-st.plotly_chart(fig)
+st.plotly_chart(fig, use_container_width=True)
