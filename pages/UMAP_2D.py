@@ -33,7 +33,7 @@ coords = pd.DataFrame(coords, columns=["UMAP1", "UMAP2"])
 
 # Create the UMAP plot
 fig = px.scatter(
-    coords, x="UMAP1", y="UMAP2", color=top_genes.index, labels={'color': 'Sample'}
+    coords, x="UMAP1", y="UMAP2", color=top_genes.index, title="UMAP", labels={'color': 'Sample'}
 )
 fig.update_traces(marker=dict(size=7))
 
