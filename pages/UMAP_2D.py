@@ -8,9 +8,6 @@ import pandas as pd
 from scipy.stats import median_abs_deviation
 import plotly.express as px
 
-# Set page layout to "wide" to make plots larger
-st.set_page_config(layout="wide")
-
 # Load the Input Data
 df = pd.read_csv("data/logcpm.csv")
 
