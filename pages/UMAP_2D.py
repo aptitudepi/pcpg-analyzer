@@ -9,7 +9,7 @@ df = pd.read_csv("data/logcpm.csv")
 df["MAD"] = df.iloc[: , 1:].apply(lambda row: median_abs_deviation(row, scale=1), axis=1)
 
 # Select top genes based on MAD
-num_genes = st.slider("Top n genes", 300, 3000, 1000)  # Replace with your desired number of genes
+num_genes = st.slider("Top n genes", 300, 9000, 1000)  # Replace with your desired number of genes
 top_genes = df.sort_values(by=["MAD"]).head(num_genes)
 top_genes.drop(['MAD'], axis=1, inplace=True)
 
