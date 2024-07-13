@@ -2,6 +2,13 @@
 # Devkumar Banerjee
 
 import pandas as pd
+import streamlit as st
 
-df = pd.read_csv("data/logcpm.csv")
-df
+st.set_page_config(layout="wide")
+
+@st.cache_data
+def showTable(filepath):
+	return pd.read_csv(filepath)
+
+st.write(showTable("data/logcpm.csv"))
+

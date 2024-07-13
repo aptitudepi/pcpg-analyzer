@@ -1,5 +1,10 @@
 altair
+hdbscan
+numpy
 pandas
+plotly
+scikit_learn
+scipy
 streamlit
-umap-learn
-plotly==5.22.0
+umap_learn
+tbb >= 2021.6.0
