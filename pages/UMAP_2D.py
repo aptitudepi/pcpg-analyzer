@@ -43,7 +43,7 @@ def label(algo,coords):
 		return cluster.KMeans(n_clusters=5).fit_predict(coords)
 
 def plot(coords, label):
-	fig = px.scatter(data_frame=coords, x="UMAP1", y="UMAP2", title="UMAP", color=label, labels={'color': 'Cluster'},  color_continuous_scale='Spectral', height=400)
+	fig = px.scatter(data_frame=coords, x="UMAP1", y="UMAP2", title="UMAP", color=label, labels={'color': 'Cluster'},  color_continuous_scale='Spectral', height=800)
 	fig.update_traces(marker=dict(size=7))
 	return fig
 
