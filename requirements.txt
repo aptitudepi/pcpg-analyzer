@@ -1,10 +1,10 @@
 altair
-hdbscan==0.8.37
+hdbscan
 numpy
-pandas==2.2.2
-plotly==5.22.0
-scikit_learn==1.5.1
-scipy==1.14.0
-streamlit==1.36.0
-umap_learn==0.5.6
-tbb >= 2021.6.0
+pandas
+plotly
+scikit_learn
+scipy
+streamlit
+umap_learn
+tbb
