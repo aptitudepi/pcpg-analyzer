@@ -10,5 +10,5 @@ st.set_page_config(layout="wide")
 def showTable(filepath):
 	return pd.read_csv(filepath)
 
+st.write(showTable("data/Metadata_allsamples.csv"))
 st.write(showTable("data/logcpm.csv"))
-
