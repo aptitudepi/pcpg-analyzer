@@ -56,8 +56,8 @@ def Label(coloring):
 
 
 def Plot(coords, label):
-	fig = px.scatter(data_frame=coords, x="UMAP1", y="UMAP2", title="UMAP", color=label, labels={'color': 'Genotype'}, height=800, hover_name="Sample_ID", hover_data=["Sample_type", "Genotype", "Source", "Mut_Type", "Experiment", "Genotype_color", "Source_sample"])
-	fig.update_traces(marker=dict(size=7))
+	fig = px.scatter(data_frame=coords, x="UMAP1", y="UMAP2", title="UMAP", color=label, labels={'color': 'Genotype'}, height=800, hover_name="Sample_ID", hover_data=["Sample_type", "Genotype", "Source", "Mut_Type", "Experiment", "Genotype_color"], symbol = "Source_sample")
+	fig.update_traces(marker=dict(size=10))
 	return fig
 
 # Streamlit GUI/main elements start here:
