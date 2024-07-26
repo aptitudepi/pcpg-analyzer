@@ -61,9 +61,6 @@ def main():
 	# Desired clustering algorithm
 	# algo = st.radio("Algorithm",["HDBScan","K Means Clustering"])
 
-	# Desired Coloring Type
-	coloring = st.radio("Coloring Type", ["Discriminating", "Nondiscriminating"])
-
 	# Perform the Data Preprocessing
 	top_genes = Preprocess("data/logcpm.csv", num_genes)
 
