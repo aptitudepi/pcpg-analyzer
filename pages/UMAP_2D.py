@@ -49,7 +49,7 @@ def Metadata():
 
 
 def Plot(coords, label):
-	fig = px.scatter(data_frame=coords, x="UMAP1", y="UMAP2", title="UMAP", color=label, labels={'color': 'Genotype', 'Sample_type': 'Sample Type', 'Mut_Type': 'Mutation Type', 'Genotype_color': 'Genotype Color', 'Source_sample': 'Source Sample'}, height=800, hover_name="Sample_ID", hover_data=["Sample_type", "Genotype", "Source", "Mut_Type", "Experiment"], symbol = "Source_sample")
+	fig = px.scatter(data_frame=coords, x="UMAP1", y="UMAP2", title="UMAP", color=label, labels={'color': 'Genotype', 'Sample_type': 'Sample Type', 'Mut_Type': 'Mutation Type', 'Source_sample':'Source Sample'}, height=800, hover_name="Sample_ID", hover_data={"UMAP1": False, "UMAP2": False,'Sample_type': True, 'Mut_Type': True, "Experiment":True}, symbol = "Source_sample")
 	fig.update_traces(marker=dict(size=10))
 	return fig
 
