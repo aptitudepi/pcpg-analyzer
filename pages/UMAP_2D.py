@@ -39,7 +39,7 @@ def UMAP(top_genes,num_neighbors,min_distance):
 
 @st.cache_data
 def Metadata():
-	return pd.read_csv("data/Metadata_allsamples.csv")
+	return pd.read_csv("data/metadata.csv")
 
 @st.cache_data
 def Label(coloring):
@@ -56,7 +56,7 @@ def Label(coloring):
 
 
 def Plot(coords, label):
-	fig = px.scatter(data_frame=coords, x="UMAP1", y="UMAP2", title="UMAP", color=label, labels={'color': 'Genotype'}, height=800, hover_name="Sample_ID", hover_data=["Sample_type", "Genotype", "Source", "Mut_Type", "Experiment", "Genotype_color"], symbol = "Source_sample")
+	fig = px.scatter(data_frame=coords, x="UMAP1", y="UMAP2", title="UMAP", color=label, labels={'color': 'Genotype', 'Sample_type': 'Sample Type', 'Mut_Type': 'Mutation Type', 'Genotype_color': 'Genotype Color', 'Source_sample': 'Source Sample'}, height=800, hover_name="Sample_ID", hover_data=["Sample_type", "Genotype", "Source", "Mut_Type", "Experiment"], symbol = "Source_sample")
 	fig.update_traces(marker=dict(size=10))
 	return fig
 

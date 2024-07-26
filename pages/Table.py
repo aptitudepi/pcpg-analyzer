@@ -10,4 +10,4 @@ st.set_page_config(layout="wide")
 def showTable(filepath):
 	return pd.read_csv(filepath)
 
-st.write(showTable("data/Metadata_allsamples.csv"), use_container_width=True)
+st.write(showTable("data/metadata.csv"), use_container_width=True)
