@@ -29,24 +29,17 @@ def Preprocess(filepath, num_genes):
 	return top_genes
 
 @st.cache_resource
-def UMAP_model(num_neighbors,min_distance):
-        return umap.UMAP(n_components=2, init='spectral',n_neighbors=num_neighbors,min_dist=min_distance,metric="euclidean")
+def UMAP_model():
+        return umap.UMAP(n_components=2, init='spectral',metric="euclidean")
 
 @st.cache_data
-def UMAP(top_genes,num_neighbors,min_distance):
+def UMAP(top_genes):
 	# Replace transposed columns with axes labels
-        return pd.DataFrame(UMAP_model(num_neighbors,min_distance).fit_transform(top_genes), columns=["UMAP1", "UMAP2"])
+        return pd.DataFrame(UMAP_model().fit_transform(top_genes), columns=["UMAP1", "UMAP2"])
 
 @st.cache_data
 def Metadata():
 	return pd.read_csv("data/metadata.csv")
-
-@st.cache_data
-def Label(coloring):
-	if (coloring == "Discriminating"):
-		return Metadata()["Genotype_color"]
-	else:
-		return Metadata()["Genotype"]
 
 #def Label():
 	#if (algo == "HDBScan"):
@@ -65,12 +58,6 @@ def main():
 	# Desired number of genes
 	num_genes = st.slider("Top n genes", 300, 9000, 1000)
 
-	# Desired number of neighbors
-	num_neighbors = st.slider("Number of Neighbors (UMAP Hyperparameter)", 1, 1000, 15)
-
-	# Desired number of genes
-	min_distance = st.slider("Minimum Distance (UMAP Hyperparameter)", 0.0, 1.0, 0.1)
-
 	# Desired clustering algorithm
 	# algo = st.radio("Algorithm",["HDBScan","K Means Clustering"])
 
@@ -81,14 +68,12 @@ def main():
 	top_genes = Preprocess("data/logcpm.csv", num_genes)
 
 	# Apply UMAP,combine 2D embedding coordinates with metadata to allow access in the plotting function
-	coords = pd.concat([UMAP(top_genes,num_neighbors,min_distance), Metadata()], axis=1)
+	coords = pd.concat([UMAP(top_genes), Metadata()], axis=1)
 
 	# Cluster data for plot colors
-	# clusters = Label(algo, coords)
-	clusters = Label(coloring)
-
+	# clusters = Metadata()["Genotype"]
 	# Create the UMAP plot
-	fig = Plot(coords,clusters)
+	fig = Plot(coords,Metadata()["Genotype"])
 
 	# Display the plot in Streamlit
 	st.plotly_chart(fig, use_container_width=True)
