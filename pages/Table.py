@@ -10,4 +10,4 @@ st.set_page_config(layout="wide")
 def showTable(filepath):
 	return pd.read_csv(filepath)[["Sample_ID","Sample_type","Genotype","Source","Mut_Type","Experiment"]]
 
-st.write(showTable("data/metadata.csv"), container_width=True, width=5000)
+st.write(showTable("data/metadata.csv"), use_container_width=True)
