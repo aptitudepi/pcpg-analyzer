@@ -1,5 +1,2 @@
-Data Summary:
-
-1. e.g., Pie/Other Charts for each column (e.g., Sample_type, Genotype, Source, Mut_type, Experiment)
-2. Add search function to Table.py
+1. Data Summary: e.g., Pie/Other Charts for each column (e.g., Sample_type, Genotype, Source, Mut_type, Experiment)
 3. Separate color and shape in UMAP/Plotly legend
