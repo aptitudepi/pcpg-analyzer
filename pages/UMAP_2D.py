@@ -152,7 +152,7 @@ def main():
 	coords = pd.concat([UMAP(top_genes), metadf], axis=1)
 
 	# Cluster data for plot colors
-	# clusters = Metadata()["Genotype"]
+	# clusters = metadf["Genotype"]
 	# Create the UMAP plot
 	fig = Plot(coords,metadf["Genotype"])
 
