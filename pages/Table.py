@@ -93,5 +93,9 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
     return df
 
+def main():
+	st.dataframe(filter_dataframe(showTable("data/metadata.csv")), use_container_width=True)
+	pass
 
-st.dataframe(filter_dataframe(showTable("data/metadata.csv")), use_container_width=True)
+if __name__ == "__main__":
+        main()

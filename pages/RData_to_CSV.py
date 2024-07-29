@@ -21,29 +21,24 @@ def dataframe_to_csv(df):
 	df.insert(0, "GENE", df.index)
 	return df.to_csv(index=False).encode("utf-8")
 
-st.title("RData to CSV Converter")
+def main():
+	st.title("RData to CSV Converter")
 
-uploaded_file = st.file_uploader("Upload your RData file here!", type=["RData", "rdata"])
+	uploaded_file = st.file_uploader("Upload your RData file here!", type=["RData", "rdata"])
 
-if uploaded_file is not None:
-    try:
-        read_file = read_rdata(uploaded_file)
-        option = st.selectbox(
-            "Which dataframe would you like to download?",
-            list(read_file.keys()),
-            index=None,
-            placeholder="Select dataframe.",
-        )
-        if option:
-            selected_df = pd.DataFrame(read_file[option])
-            csv_data = dataframe_to_csv(selected_df)
-            st.download_button(
-                label="Download your dataframe as CSV",
-                data=csv_data,
-                file_name=f"{option}.csv",
-                mime="text/csv"
-            )
-    except Exception as e:
-        st.error(f"An error occurred: {str(e)}")
-else:
-    st.info("Please upload an RData file to begin.")
+	if uploaded_file is not None:
+    		try:
+        		read_file = read_rdata(uploaded_file)
+        		option = st.selectbox("Which dataframe would you like to download?",list(read_file.keys()),index=None,placeholder="Select dataframe.")
+        		if option:
+            			selected_df = pd.DataFrame(read_file[option])
+            			csv_data = dataframe_to_csv(selected_df)
+            			st.download_button(label="Download your dataframe as CSV",data=csv_data,file_name=f"{option}.csv",mime="text/csv")
+    		except Exception as e:
+        		st.error(f"An error occurred: {str(e)}")
+	else:
+    		st.info("Please upload an RData file to begin.")
+	pass
+
+if __name__ == "__main__":
+        main()
