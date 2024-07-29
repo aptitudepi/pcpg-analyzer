@@ -4,9 +4,9 @@
 # Load library imports
 import streamlit as st
 import umap
-from sklearn.decomposition import PCA
-from sklearn import cluster
-import hdbscan
+#from sklearn.decomposition import PCA
+#from sklearn import cluster
+#import hdbscan
 import pandas as pd
 from pandas.api.types import (
     is_categorical_dtype,
@@ -149,7 +149,10 @@ def main():
 	metadf = Metadata()
 
 	# Apply UMAP,combine 2D embedding coordinates with metadata to allow access in the plotting function
-	coords = pd.concat([UMAP(top_genes), metadf], axis=1)
+	#coords = pd.concat([UMAP(top_genes), metadf], axis=1)
+	cc = UMAP(top_genes)
+	cc["Sample_ID"]=top_genes.index
+	coords = pd.merge(cc,metadf,on='Sample_ID')
 
 	# Cluster data for plot colors
 	# clusters = metadf["Genotype"]
