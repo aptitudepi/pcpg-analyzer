@@ -157,7 +157,7 @@ def main():
 	# Cluster data for plot colors
 	# clusters = metadf["Genotype"]
 	# Create the UMAP plot
-	fig = Plot(coords,metadf["Genotype"])
+	fig = Plot(coords,coords["Genotype"])
 
 	# Display the plot in Streamlit
 	st.plotly_chart(fig, use_container_width=True)
