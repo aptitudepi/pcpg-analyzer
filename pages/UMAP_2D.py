@@ -130,7 +130,7 @@ def Metadata():
 
 
 def Plot(coords, label):
-	fig = px.scatter(data_frame=coords, x="UMAP1", y="UMAP2", title="UMAP", color=label, labels={'color': 'Genotype', 'Sample_type': 'Sample Type', 'Mut_Type': 'Mutation Type', 'Source_sample':'Source Sample'}, height=800, hover_name="Sample_ID", hover_data={"UMAP1": False, "UMAP2": False,'Sample_type': True, 'Mut_Type': True, "Experiment":True}, symbol = "Source_sample")
+	fig = px.scatter(data_frame=coords, x="UMAP1", y="UMAP2", title="UMAP", color=label, color_discrete_sequence=["#696969", "#d3d3d3", "#556b2f", "#228b22", "#7f0000", "#483d8b", "#008b8b", "#4682b4", "#d2691e", "#00008b", "#32cd32", "#8fbc8f", "#8b008b", "#b03060", "#ff4500", "#ffa500", "#ffff00", "#00ff00", "#00fa9a", "#8a2be2", "#dc143c", "#00ffff", "#0000ff", "#f08080", "#adff2f", "#ff00ff", "#1e90ff", "#f0e68c", "#dda0dd", "#ff1493"], labels={'color': 'Genotype', 'Sample_type': 'Sample Type', 'Mut_Type': 'Mutation Type', 'Source_sample':'Source Sample'}, height=800, hover_name="Sample_ID", hover_data={"UMAP1": False, "UMAP2": False,'Sample_type': True, 'Mut_Type': True, "Experiment":True}, symbol = "Source_sample")
 	fig.update_traces(marker=dict(size=10))
 	return fig
 
@@ -157,7 +157,7 @@ def main():
 	# Cluster data for plot colors
 	# clusters = metadf["Genotype"]
 	# Create the UMAP plot
-	fig = Plot(coords,coords["Genotype"])
+	fig = Plot(coords,coords["Genotype_color"])
 
 	# Display the plot in Streamlit
 	st.plotly_chart(fig, use_container_width=True)

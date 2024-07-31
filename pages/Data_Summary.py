@@ -104,6 +104,11 @@ def main():
 	# Visualization
 	st.header("Data Visualizations")
 
+	# Bar Chart: Count of Genotypes
+	st.subheader("Count of Genotypes")
+	genotype_counts = df["Genotype"].value_counts()
+	st.bar_chart(genotype_counts)
+
 	# Bar Chart: Count of Sample Types
 	st.subheader("Count of Sample Types")
 	sample_type_counts = df["Sample_type"].value_counts()
@@ -111,18 +116,14 @@ def main():
 
 	# Line Chart: Count of Genotypes over Sample Types
 	st.subheader("Count of Genotypes over Sample Types")
-	genotype_counts = df.groupby("Sample_type")["Genotype"].count()
-	st.line_chart(genotype_counts)
+	genotype_sample_counts = df.groupby("Sample_type")["Genotype"].count().reset_index()
+	line_chart = alt.Chart(genotype_sample_counts).mark_line(point=True).encode(x=alt.X('Sample_type:N', title='Sample Type'),y=alt.Y('Genotype:Q', title='Count of Genotype'),tooltip=['Sample_type:N', 'Genotype:Q']).interactive()
+	st.altair_chart(line_chart, use_container_width=True)
 
 	# Scatter Plot: Sample Types vs. Mut_Type
 	st.subheader("Sample Types vs. Mut_Type")
 	st.write("Scatter plot to visualize the relationship between Sample Types and Mutation Types")
 	st.scatter_chart(df, x="Sample_type", y="Mut_Type", size="Sample_ID", color="Genotype")
-
-	# Histogram: Distribution of Genotype
-	st.subheader("Distribution of Genotype")
-	histogram = alt.Chart(df).mark_bar().encode(x=alt.X('Genotype', bin=True),y='count()',tooltip=['count()']).interactive()
-	st.altair_chart(histogram, use_container_width=True)
 
 	# Pie Chart: Proportion of Mutation Types
 	st.subheader("Proportion of Mutation Types")

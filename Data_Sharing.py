@@ -12,28 +12,12 @@ def main():
 	st.set_page_config(layout="wide")
 
 	"""
-	# Welcome to Streamlit!
+	# Pheochromocytoma and Paraganglioma Genomic Portal
 
-	Edit `/streamlit_app.py` to customize this app to your heart's desire :heart:.
-	If you have any questions, checkout our [documentation](https://docs.streamlit.io) and [community
-	forums](https://discuss.streamlit.io).
+	Pheochromocytoma and paraganglioma (PCPG) are rare neuroendocrine tumors with limited genomic data resources, hindering research progress and therapeutic development. We have profiled 83 PCPG tumors using both bulk and single-cell/nuclei datasets in collaboration between UT Health San Antonio (UTHSA) and University of California (UCLA). This transcriptomic data is diverse, including bulk RNA sequencing data of primary tumors and organoids, as well as pseudobulk data of the single-cell/nuclei RNA sequencing samples. We have also utilizied the publicaly available PCPG transctiptomic data from the cancer genome atlas (TCGA).
+	We have created this portal to share this transcriptomic data of PCPG tumors with the community. It allows users to explore gene expression patterns, visualize sample clusters, and analyze relationships between genotype and transcriptome clusters of individual samples.
 
-	In the meantime, below is an example of what you can do with just a few lines of code:
 	"""
-
-	num_points = st.slider("Number of points in spiral", 1, 10000, 1100)
-	num_turns = st.slider("Number of turns in spiral", 1, 300, 31)
-
-	indices = np.linspace(0, 1, num_points)
-	theta = 2 * np.pi * num_turns * indices
-	radius = indices
-
-	x = radius * np.cos(theta)
-	y = radius * np.sin(theta)
-
-	df = pd.DataFrame({"x": x,"y": y,"idx": indices,"rand": np.random.randn(num_points)})
-
-	st.altair_chart(alt.Chart(df, height=700, width=700).mark_point(filled=True).encode(x=alt.X("x", axis=None),y=alt.Y("y", axis=None),color=alt.Color("idx", legend=None, scale=alt.Scale()),size=alt.Size("rand", legend=None, scale=alt.Scale(range=[1, 150]))))
 
 	pass
 
