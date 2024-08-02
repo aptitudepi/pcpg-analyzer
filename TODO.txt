@@ -1,1 +1,4 @@
-1. Separate color and shape in UMAP/Plotly legend
+1. Separate color and shape in UMAP/Plotly legend (if possible)
+2. 7 shapes instead of 6 for UMAP_2D
+3. About.py paragraph stuff
+4. About.py non-wide layout
