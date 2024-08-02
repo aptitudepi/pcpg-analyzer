@@ -15,7 +15,7 @@ st.set_page_config(layout="wide")
 
 @st.cache_data
 def showTable(filepath):
-    return pd.read_csv(filepath)[["Sample_ID", "Sample_type", "Genotype", "Source", "Mut_Type", "Experiment"]]
+    return pd.read_csv(filepath)[["Sample_ID", "Sample_type", "Genotype_color", "Source", "Mut_Type", "Experiment"]]
 
 def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -27,10 +27,6 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     Returns:
         pd.DataFrame: Filtered dataframe
     """
-    modify = st.checkbox("Add filters")
-
-    if not modify:
-        return df
 
     df = df.copy()
 
@@ -98,44 +94,61 @@ def main():
 	# Load data
 	df = filter_dataframe(showTable("data/metadata.csv"))
 
-	# Display filtered data
-	st.dataframe(df, use_container_width=True)
-
 	# Visualization
 	st.header("Data Visualizations")
 
-	# Bar Chart: Count of Genotypes
-	st.subheader("Count of Genotypes")
-	genotype_counts = df["Genotype"].value_counts()
-	st.bar_chart(genotype_counts)
+	# Genotype
+	col1, col2 = st.columns(2)
+	with col1:
 
-	# Bar Chart: Count of Sample Types
-	st.subheader("Count of Sample Types")
-	sample_type_counts = df["Sample_type"].value_counts()
-	st.bar_chart(sample_type_counts)
+		# Bar Chart: Proportion of Genotypes
+		col1.subheader("Proportion of Genotypes")
+		genotype_percentages = (df["Genotype_color"].value_counts(normalize=True).mul(100).round(1))
+		col1.bar_chart(genotype_percentages, use_container_width=True)
 
-	# Line Chart: Count of Genotypes over Sample Types
-	st.subheader("Count of Genotypes over Sample Types")
-	genotype_sample_counts = df.groupby("Sample_type")["Genotype"].count().reset_index()
-	line_chart = alt.Chart(genotype_sample_counts).mark_line(point=True).encode(x=alt.X('Sample_type:N', title='Sample Type'),y=alt.Y('Genotype:Q', title='Count of Genotype'),tooltip=['Sample_type:N', 'Genotype:Q']).interactive()
-	st.altair_chart(line_chart, use_container_width=True)
+	with col2:
 
-	# Scatter Plot: Sample Types vs. Mut_Type
-	st.subheader("Sample Types vs. Mut_Type")
-	st.write("Scatter plot to visualize the relationship between Sample Types and Mutation Types")
-	st.scatter_chart(df, x="Sample_type", y="Mut_Type", size="Sample_ID", color="Genotype")
+		# Pie Chart: Proportion of Genotypes
+		col2.subheader("Proportion of Genotypes")
+		genotype_percentages = df["Genotype_color"].value_counts(normalize=True).sort_values(ascending=False).mul(100).reset_index()
+		genotype_percentages.columns = ['Genotype_color', 'Percentage']
+		chart = alt.Chart(genotype_percentages).mark_arc().encode(theta=alt.Theta(field='Percentage', type='quantitative', sort='descending'),color=alt.Color(field='Genotype_color', scale = alt.Scale(range=["#696969", "#d3d3d3", "#556b2f", "#228b22", "#7f0000", "#483d8b", "#008b8b", "#4682b4", "#d2691e", "#00008b", "#32cd32", "#8fbc8f", "#8b008b", "#b03060", "#ff4500", "#ffa500", "#ffff00", "#00ff00", "#00fa9a", "#8a2be2", "#dc143c", "#00ffff", "#0000ff", "#f08080", "#adff2f", "#ff00ff", "#1e90ff", "#f0e68c", "#dda0dd", "#ff1493"])),order=alt.Order(field="Value",type="quantitative",sort="descending"),tooltip=['Genotype_color', 'Percentage']).interactive()
+		col2.altair_chart(chart, use_container_width=True)
 
-	# Pie Chart: Proportion of Mutation Types
-	st.subheader("Proportion of Mutation Types")
-	mut_type_counts = df["Mut_Type"].value_counts().reset_index()
-	mut_type_counts.columns = ['Mut_Type', 'Count']
-	pie_chart = alt.Chart(mut_type_counts).mark_arc().encode(theta=alt.Theta(field="Count", type="quantitative"),color=alt.Color(field="Mut_Type", type="nominal"),tooltip=['Mut_Type', 'Count']).interactive()
-	st.altair_chart(pie_chart, use_container_width=True)
+	# Sample Type
+	col1, col2 = st.columns(2)
+	with col1:
 
-	# Heatmap: Correlation between Sample Types and Mutation Types
-	st.subheader("Correlation between Sample Types and Mutation Types")
-	heatmap = alt.Chart(df).mark_rect().encode(x='Sample_type',y='Mut_Type',color='count()',tooltip=['count()']).interactive()
-	st.altair_chart(heatmap, use_container_width=True)
+		# Bar Chart: Proportion of Sample Types
+		col1.subheader("Proportion of Sample Types")
+		sample_percentages = (df["Sample_type"].value_counts(normalize=True).mul(100).round(1))
+		col1.bar_chart(sample_percentages, use_container_width=True)
+
+	with col2:
+
+		# Pie Chart: Proportion of Sample Types
+		col2.subheader("Proportion of Sample Types")
+		sample_percentages = df["Sample_type"].value_counts(normalize=True).sort_values(ascending=False).mul(100).reset_index()
+		sample_percentages.columns = ['Sample_type', 'Percentage']
+		chart = alt.Chart(sample_percentages).mark_arc().encode(theta=alt.Theta(field='Percentage', type='quantitative', sort='descending'),color=alt.Color(field='Sample_type', scale = alt.Scale(range=["#696969", "#d3d3d3", "#556b2f", "#228b22", "#7f0000", "#483d8b", "#008b8b", "#4682b4", "#d2691e", "#00008b", "#32cd32", "#8fbc8f", "#8b008b", "#b03060", "#ff4500", "#ffa500", "#ffff00", "#00ff00", "#00fa9a", "#8a2be2", "#dc143c", "#00ffff", "#0000ff", "#f08080", "#adff2f", "#ff00ff", "#1e90ff", "#f0e68c", "#dda0dd", "#ff1493"])),order=alt.Order(field="Value",type="quantitative",sort="descending"),tooltip=['Sample_type', 'Percentage']).interactive()
+		col2.altair_chart(chart, use_container_width=True)
+
+	col1, col2 = st.columns(2)
+	with col1:
+
+		# Bar Chart: Proportion of Mutation Types
+		col1.subheader("Proportion of Mutation Types")
+		mut_percentages = (df["Mut_Type"].value_counts(normalize=True).mul(100).round(1))
+		col1.bar_chart(mut_percentages, use_container_width=True)
+
+	with col2:
+
+		# Pie Chart: Proportion of Mutation Types
+		col2.subheader("Proportion of Mutation Types")
+		mut_percentages = df["Mut_Type"].value_counts(normalize=True).sort_values(ascending=False).mul(100).reset_index()
+		mut_percentages.columns = ['Mut_Type', 'Percentage']
+		chart = alt.Chart(mut_percentages).mark_arc().encode(theta=alt.Theta(field='Percentage', type='quantitative', sort='descending'),color=alt.Color(field='Mut_Type', scale = alt.Scale(range=["#696969", "#d3d3d3", "#556b2f", "#228b22", "#7f0000", "#483d8b", "#008b8b", "#4682b4", "#d2691e", "#00008b", "#32cd32", "#8fbc8f", "#8b008b", "#b03060", "#ff4500", "#ffa500", "#ffff00", "#00ff00", "#00fa9a", "#8a2be2", "#dc143c", "#00ffff", "#0000ff", "#f08080", "#adff2f", "#ff00ff", "#1e90ff", "#f0e68c", "#dda0dd", "#ff1493"])),order=alt.Order(field="Value",type="quantitative",sort="descending"),tooltip=['Mut_Type', 'Percentage']).interactive()
+		col2.altair_chart(chart, use_container_width=True)
 
 	pass
 
