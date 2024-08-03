@@ -5,12 +5,12 @@
     "codespaces": {
       "openFiles": [
         "README.md",
-        "Data_Sharing.py"
+        "1-About.py"
       ]
     }
   },
   "postAttachCommand": {
-    "server": "streamlit run Data_Sharing.py --server.enableCORS false --server.enableXsrfProtection false"
+    "server": "streamlit run 1-About.py --server.enableCORS false --server.enableXsrfProtection false"
   },
   "portsAttributes": {
     "8501": {
