@@ -104,7 +104,7 @@ def main():
 		# Bar Chart: Proportion of Genotypes
 		col1.subheader("Proportion of Genotypes")
 		genotype_percentages = (df["Genotype_color"].value_counts(normalize=True).mul(100).round(1))
-		col1.bar_chart(genotype_percentages, use_container_width=True)
+		col1.bar_chart(genotype_percentages, color = "#FF0000", use_container_width=True)
 
 	with col2:
 
@@ -122,7 +122,7 @@ def main():
 		# Bar Chart: Proportion of Sample Types
 		col1.subheader("Proportion of Sample Types")
 		sample_percentages = (df["Sample_type"].value_counts(normalize=True).mul(100).round(1))
-		col1.bar_chart(sample_percentages, use_container_width=True)
+		col1.bar_chart(sample_percentages, color = "#FF0000", use_container_width=True)
 
 	with col2:
 
@@ -139,7 +139,7 @@ def main():
 		# Bar Chart: Proportion of Mutation Types
 		col1.subheader("Proportion of Mutation Types")
 		mut_percentages = (df["Mut_Type"].value_counts(normalize=True).mul(100).round(1))
-		col1.bar_chart(mut_percentages, use_container_width=True)
+		col1.bar_chart(mut_percentages, color = "#FF0000", use_container_width=True)
 
 	with col2:
 
