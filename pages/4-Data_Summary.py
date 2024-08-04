@@ -89,68 +89,41 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
     return df
 
-def main():
-
-	# Load data
-	df = filter_dataframe(showTable("data/metadata.csv"))
-
-	# Visualization
-	st.header("Data Visualizations")
-
-	# Genotype
+def plotter(df, colname, dispname):
 	col1, col2 = st.columns(2)
 	with col1:
 
-		# Bar Chart: Proportion of Genotypes
-		col1.subheader("Proportion of Genotypes")
-		genotype_percentages = (df["Genotype_color"].value_counts(normalize=True).mul(100).round(1))
-		col1.bar_chart(genotype_percentages, color = "#FF0000", use_container_width=True)
-
-	with col2:
-
-		# Pie Chart: Proportion of Genotypes
-		col2.subheader("Proportion of Genotypes")
-		genotype_percentages = df["Genotype_color"].value_counts(normalize=True).sort_values(ascending=False).mul(100).reset_index()
-		genotype_percentages.columns = ['Genotype_color', 'Percentage']
-		chart = alt.Chart(genotype_percentages).mark_arc().encode(theta=alt.Theta(field='Percentage', type='quantitative', sort='descending'),color=alt.Color(field='Genotype_color', scale = alt.Scale(range=["#696969", "#d3d3d3", "#556b2f", "#228b22", "#7f0000", "#483d8b", "#008b8b", "#4682b4", "#d2691e", "#00008b", "#32cd32", "#8fbc8f", "#8b008b", "#b03060", "#ff4500", "#ffa500", "#ffff00", "#00ff00", "#00fa9a", "#8a2be2", "#dc143c", "#00ffff", "#0000ff", "#f08080", "#adff2f", "#ff00ff", "#1e90ff", "#f0e68c", "#dda0dd", "#ff1493"])),order=alt.Order(field="Value",type="quantitative",sort="descending"),tooltip=['Genotype_color', 'Percentage']).interactive()
-		col2.altair_chart(chart, use_container_width=True)
-
-	# Sample Type
-	col1, col2 = st.columns(2)
-	with col1:
-
-		# Bar Chart: Proportion of Sample Types
-		col1.subheader("Proportion of Sample Types")
-		sample_percentages = (df["Sample_type"].value_counts(normalize=True).mul(100).round(1))
-		col1.bar_chart(sample_percentages, color = "#FF0000", use_container_width=True)
-
-	with col2:
-
-		# Pie Chart: Proportion of Sample Types
-		col2.subheader("Proportion of Sample Types")
-		sample_percentages = df["Sample_type"].value_counts(normalize=True).sort_values(ascending=False).mul(100).reset_index()
-		sample_percentages.columns = ['Sample_type', 'Percentage']
-		chart = alt.Chart(sample_percentages).mark_arc().encode(theta=alt.Theta(field='Percentage', type='quantitative', sort='descending'),color=alt.Color(field='Sample_type', scale = alt.Scale(range=["#696969", "#d3d3d3", "#556b2f", "#228b22", "#7f0000", "#483d8b", "#008b8b", "#4682b4", "#d2691e", "#00008b", "#32cd32", "#8fbc8f", "#8b008b", "#b03060", "#ff4500", "#ffa500", "#ffff00", "#00ff00", "#00fa9a", "#8a2be2", "#dc143c", "#00ffff", "#0000ff", "#f08080", "#adff2f", "#ff00ff", "#1e90ff", "#f0e68c", "#dda0dd", "#ff1493"])),order=alt.Order(field="Value",type="quantitative",sort="descending"),tooltip=['Sample_type', 'Percentage']).interactive()
-		col2.altair_chart(chart, use_container_width=True)
-
-	col1, col2 = st.columns(2)
-	with col1:
-
-		# Bar Chart: Proportion of Mutation Types
-		col1.subheader("Proportion of Mutation Types")
-		mut_percentages = (df["Mut_Type"].value_counts(normalize=True).mul(100).round(1))
-		col1.bar_chart(mut_percentages, color = "#FF0000", use_container_width=True)
+		# Bar Chart: Proportion of Sequencing Types
+		col1.subheader("Proportion of " + dispname)
+		percentages = df[colname].value_counts(normalize=True).mul(100).round(1).reset_index()
+		percentages.columns = [colname, 'Percentage']
+		col1.altair_chart(alt.Chart(percentages).mark_bar(color="#FF0000").encode(x=alt.X(colname+':N', title=dispname, sort=alt.EncodingSortField(field=colname, op="count", order='descending')), y=alt.Y('Percentage:Q', title='Proportion of ' + dispname), tooltip=[colname, 'Percentage']), use_container_width=True)
 
 	with col2:
 
 		# Pie Chart: Proportion of Mutation Types
-		col2.subheader("Proportion of Mutation Types")
-		mut_percentages = df["Mut_Type"].value_counts(normalize=True).sort_values(ascending=False).mul(100).reset_index()
-		mut_percentages.columns = ['Mut_Type', 'Percentage']
-		chart = alt.Chart(mut_percentages).mark_arc().encode(theta=alt.Theta(field='Percentage', type='quantitative', sort='descending'),color=alt.Color(field='Mut_Type', scale = alt.Scale(range=["#696969", "#d3d3d3", "#556b2f", "#228b22", "#7f0000", "#483d8b", "#008b8b", "#4682b4", "#d2691e", "#00008b", "#32cd32", "#8fbc8f", "#8b008b", "#b03060", "#ff4500", "#ffa500", "#ffff00", "#00ff00", "#00fa9a", "#8a2be2", "#dc143c", "#00ffff", "#0000ff", "#f08080", "#adff2f", "#ff00ff", "#1e90ff", "#f0e68c", "#dda0dd", "#ff1493"])),order=alt.Order(field="Value",type="quantitative",sort="descending"),tooltip=['Mut_Type', 'Percentage']).interactive()
+		col2.subheader("Proportion of " + dispname)
+		percentages = df[colname].value_counts(normalize=True).sort_values(ascending=False).mul(100).reset_index()
+		percentages.columns = [colname, 'Percentage']
+		chart = alt.Chart(percentages).mark_arc().encode(theta=alt.Theta(field='Percentage', type='quantitative', sort='descending'),color=alt.Color(field=colname, scale = alt.Scale(range=["#696969", "#d3d3d3", "#556b2f", "#228b22", "#7f0000", "#483d8b", "#008b8b", "#4682b4", "#d2691e", "#00008b", "#32cd32", "#8fbc8f", "#8b008b", "#b03060", "#ff4500", "#ffa500", "#ffff00", "#00ff00", "#00fa9a", "#8a2be2", "#dc143c", "#00ffff", "#0000ff", "#f08080", "#adff2f", "#ff00ff", "#1e90ff", "#f0e68c", "#dda0dd", "#ff1493"])),order=alt.Order(field="Value",type="quantitative",sort="descending"),tooltip=[colname, 'Percentage']).interactive()
 		col2.altair_chart(chart, use_container_width=True)
 
+def main():
+
+	# Load data
+	df = filter_dataframe(showTable("data/metadata.csv").drop("Sample_ID", axis=1))
+
+	# Visualization
+	st.header("Data Visualizations")
+	dispnames = ["Sample Types", "Genotypes", "Source", "Mutation Types", "Sequencing Types"]
+
+	for i in range(5):
+		plotter(df, df.columns[i], dispnames[i])
+
+
 	pass
+
+
 
 if __name__ == "__main__":
         main()
