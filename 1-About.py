@@ -9,7 +9,7 @@ import streamlit as st
 def main():
 
 	# Set page layout to "wide" to make plots larger
-	st.set_page_config(layout="wide")
+	st.set_page_config(layout="centered")
 
 	"""
 	# Pheochromocytoma and Paraganglioma Genomic Portal
