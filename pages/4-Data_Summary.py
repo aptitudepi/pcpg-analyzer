@@ -15,7 +15,11 @@ st.set_page_config(layout="wide")
 
 @st.cache_data
 def showTable(filepath):
-    return pd.read_csv(filepath)[["Sample_ID", "Sample_type", "Genotype_color", "Source", "Mut_Type", "Experiment"]]
+    df = pd.read_csv(filepath)[["Sample_ID", "Sample_type", "Genotype_color", "Source", "Mut_Type", "Experiment"]]
+    m = {"Primary Tumor": ["Additional - New Primary", "Frozen Tumor","Primary Solid Tumor","Metastatic"],"Dissociated Tumor": ["Dissociated Tumor"], "Organoid": ["Organoid"]}
+    inverse_m = {v: k for k, values in m.items() for v in (values if isinstance(values, list) else [values])}
+    df['Sample_type'] = df['Sample_type'].replace(inverse_m)
+    return df
 
 def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -89,36 +93,53 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
     return df
 
-def plotter(df, colname, dispname):
+def plotter(df, colname, dispname, isStacked):
 	col1, col2 = st.columns(2)
 	with col1:
 
-		# Bar Chart: Proportion of Sequencing Types
 		col1.subheader("Proportion of " + dispname)
-		percentages = df[colname].value_counts(normalize=True).mul(100).round(1).reset_index()
-		percentages.columns = [colname, 'Percentage']
-		col1.altair_chart(alt.Chart(percentages).mark_bar(color="#FF0000").encode(x=alt.X(colname+':N', title=dispname, sort=alt.EncodingSortField(field=colname, op="count", order='descending')), y=alt.Y('Percentage:Q', title='Proportion of ' + dispname), tooltip=[colname, 'Percentage']), use_container_width=True)
+
+		if (isStacked):
+			percentages = df[colname].value_counts(normalize=True).mul(100).round(1).reset_index()
+			percentages.columns = [colname, 'Percentage']
+			# Sort percentages in descending order
+			percentages = percentages.sort_values('Percentage', ascending=False)
+			# Calculate cumulative percentages for stacking
+			percentages['cumulative'] = percentages['Percentage'].cumsum()
+			percentages['cumulative_prev'] = percentages['cumulative'].shift(1, fill_value=0)
+			# Create the stacked bar chart
+			chart = alt.Chart(percentages).mark_bar().encode(y=alt.Y('cumulative_prev:Q', title='Percentage'),y2=alt.Y2('cumulative:Q'),x=alt.X('dummy:N', title='', axis=None),color=alt.Color(colname + ':N', sort=None),tooltip=[colname, 'Percentage']).transform_calculate(dummy="''")
+			# Combine chart and text
+			final_chart = (chart).properties()
+			col1.altair_chart(final_chart, use_container_width=True)
+		else:
+			percentages = df[colname].value_counts(normalize=True).mul(100).round(1).reset_index()
+			percentages.columns = [colname, 'Percentage']
+			col1.altair_chart(alt.Chart(percentages).mark_bar(color="#FF0000").encode(x=alt.X(colname+':N', title=dispname, sort=alt.EncodingSortField(field=colname, op="count", order='descending')), y=alt.Y('Percentage:Q', title='Proportion of ' + dispname), tooltip=[colname, 'Percentage']), use_container_width=True)
 
 	with col2:
 
-		# Pie Chart: Proportion of Mutation Types
 		col2.subheader("Proportion of " + dispname)
 		percentages = df[colname].value_counts(normalize=True).sort_values(ascending=False).mul(100).reset_index()
 		percentages.columns = [colname, 'Percentage']
 		chart = alt.Chart(percentages).mark_arc().encode(theta=alt.Theta(field='Percentage', type='quantitative', sort='descending'),color=alt.Color(field=colname, scale = alt.Scale(range=["#696969", "#d3d3d3", "#556b2f", "#228b22", "#7f0000", "#483d8b", "#008b8b", "#4682b4", "#d2691e", "#00008b", "#32cd32", "#8fbc8f", "#8b008b", "#b03060", "#ff4500", "#ffa500", "#ffff00", "#00ff00", "#00fa9a", "#8a2be2", "#dc143c", "#00ffff", "#0000ff", "#f08080", "#adff2f", "#ff00ff", "#1e90ff", "#f0e68c", "#dda0dd", "#ff1493"])),order=alt.Order(field="Value",type="quantitative",sort="descending"),tooltip=[colname, 'Percentage']).interactive()
 		col2.altair_chart(chart, use_container_width=True)
 
+
 def main():
 
 	# Load data
 	df = filter_dataframe(showTable("data/metadata.csv").drop("Sample_ID", axis=1))
-
 	# Visualization
 	st.header("Data Visualizations")
 	dispnames = ["Sample Types", "Genotypes", "Source", "Mutation Types", "Sequencing Types"]
 
 	for i in range(5):
-		plotter(df, df.columns[i], dispnames[i])
+		if i == 1:
+			filter = df[df.columns[i]].str.contains("Unknown")
+			plotter(df[~filter], df.columns[i], dispnames[i], False)
+			continue
+		plotter(df, df.columns[i], dispnames[i], True)
 
 
 	pass
